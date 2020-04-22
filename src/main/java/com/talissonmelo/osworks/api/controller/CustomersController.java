@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.talissonmelo.osworks.domain.model.Customers;
 import com.talissonmelo.osworks.domain.repository.CustomersRepository;
+import com.talissonmelo.osworks.domain.service.CustomersService;
 
 @RestController
 @RequestMapping(value = "/customers")
@@ -27,6 +28,9 @@ public class CustomersController {
 	
 	@Autowired
 	private CustomersRepository customersRepository;
+	
+	@Autowired 
+	private CustomersService service;
 
 	@GetMapping
 	public List<Customers> findAll() {
@@ -48,7 +52,7 @@ public class CustomersController {
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Customers insert(@Valid @RequestBody Customers client) {
-		return customersRepository.save(client);
+		return service.insert(client);
 	}
 	
 	@PutMapping(value = "/{id}")
@@ -58,7 +62,7 @@ public class CustomersController {
 		}
 		
 		client.setId(id);
-		customersRepository.save(client);
+		service.insert(client);
 		return ResponseEntity.ok().body(client);
 	}
 	
@@ -68,7 +72,7 @@ public class CustomersController {
 			return ResponseEntity.notFound().build();
 		}
 		
-		customersRepository.deleteById(id);
+		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 

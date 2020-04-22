@@ -11,11 +11,26 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.talissonmelo.osworks.domain.service.exceptions.RuleException;
+
 @ControllerAdvice
 public class ApiExceptionHanlder extends ResponseEntityExceptionHandler{
+	
+	@ExceptionHandler(RuleException.class)
+	public ResponseEntity<Object> rule(RuleException e, WebRequest request){
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		
+		StandardError error = new StandardError();
+		error.setStatus(status.value());
+		error.setMsg(e.getMessage());
+		error.setTimestamp(LocalDateTime.now());
+		
+		return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
+	}
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
