@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -45,6 +46,17 @@ public class CustomersController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public Customers insert(@RequestBody Customers client) {
 		return customersRepository.save(client);
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Customers> update(@PathVariable Long id, @RequestBody Customers client){
+		if(!customersRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		client.setId(id);
+		customersRepository.save(client);
+		return ResponseEntity.ok().body(client);
 	}
 
 }
