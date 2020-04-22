@@ -3,9 +3,12 @@ package com.talissonmelo.osworks.api.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,12 +47,12 @@ public class CustomersController {
 	
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Customers insert(@RequestBody Customers client) {
+	public Customers insert(@Valid @RequestBody Customers client) {
 		return customersRepository.save(client);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Customers> update(@PathVariable Long id, @RequestBody Customers client){
+	public ResponseEntity<Customers> update(@Valid @PathVariable Long id, @RequestBody Customers client){
 		if(!customersRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
@@ -57,6 +60,16 @@ public class CustomersController {
 		client.setId(id);
 		customersRepository.save(client);
 		return ResponseEntity.ok().body(client);
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> deleteById(@PathVariable Long id){
+		if(!customersRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		customersRepository.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }
