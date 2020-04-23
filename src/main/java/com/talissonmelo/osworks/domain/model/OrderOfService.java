@@ -3,6 +3,8 @@ package com.talissonmelo.osworks.domain.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.talissonmelo.osworks.domain.model.enums.StatusOrderService;
@@ -37,6 +40,9 @@ public class OrderOfService implements Serializable {
 	
 	private OffsetDateTime dateOpen;
 	private OffsetDateTime dateFinished;
+	
+	@OneToMany(mappedBy = "order_of_service")
+	private List<Comments> comments = new ArrayList<>();
 	
 	public Long getId() {
 		return id;
@@ -94,6 +100,10 @@ public class OrderOfService implements Serializable {
 		this.dateFinished = dateFinished;
 	}
 	
+	public List<Comments> getComments() {
+		return comments;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
