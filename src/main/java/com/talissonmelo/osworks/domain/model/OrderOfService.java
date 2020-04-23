@@ -1,5 +1,6 @@
 package com.talissonmelo.osworks.domain.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -9,25 +10,50 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.sun.istack.NotNull;
 import com.talissonmelo.osworks.domain.model.enums.StatusOrderService;
+import com.talissonmelo.osworks.domain.model.validations.ValidationGroups;
 
 @Entity
-public class OrderOfService {
-	
+@Table(name = "order_of_service")
+public class OrderOfService implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Valid
+	@NotNull
+	@ConvertGroup(from = Default.class, to = ValidationGroups.CustomersId.class)
 	@ManyToOne
+	@JoinColumn(name = "customers_id")
 	private Customers customers;
+	
+	@NotBlank
 	private String description;
+	
+	@NotNull
 	private BigDecimal price;
 	
+	@JsonProperty(access = Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
 	private StatusOrderService status;
+	
+	@JsonProperty(access = Access.READ_ONLY)
 	private LocalDateTime dateOpen;
+	
+	@JsonProperty(access = Access.READ_ONLY)
 	private LocalDateTime dateFinished;
 	
 	public Long getId() {

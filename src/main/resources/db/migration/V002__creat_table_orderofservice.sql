@@ -4,8 +4,8 @@ create table order_of_service (
 	description varchar(80) not null,
 	price decimal(10,2) not null,
 	status varchar(20) not null,
-	dateOpen datetime not null,
-	dateFinished datetime,
+	date_open datetime not null,
+	date_finished datetime,
 	primary key (id)
 );
 
