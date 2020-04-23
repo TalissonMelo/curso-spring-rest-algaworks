@@ -2,6 +2,7 @@ package com.talissonmelo.osworks.api.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -21,40 +22,53 @@ import com.talissonmelo.osworks.domain.model.OrderOfService;
 import com.talissonmelo.osworks.domain.repository.OrderOfServiceRepository;
 import com.talissonmelo.osworks.domain.service.OrderOfServiceService;
 import com.talissonmelo.osworks.model.dto.OrderOfServiceDTO;
+import com.talissonmelo.osworks.model.dto.OrderOfServiceInputDTO;
 
 @RestController
 @RequestMapping(value = "/orders")
 public class OrderOfServiceController {
-	
+
 	@Autowired
 	private OrderOfServiceService service;
-	
+
 	@Autowired
 	private OrderOfServiceRepository repository;
-	
+
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public OrderOfService insert(@Valid @RequestBody OrderOfService order) {
-		return service.insert(order);
+	public OrderOfServiceDTO insert(@Valid @RequestBody OrderOfServiceInputDTO dto) {
+		OrderOfService order = toEntity(dto);
+		return fromDTO(service.insert(order));
 	}
 
 	@GetMapping
-	public List<OrderOfService> findAll(){
-		return repository.findAll();
+	public List<OrderOfServiceDTO> findAll() {
+		return toCollectionFromDTO(repository.findAll());
 	}
-	
+
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<OrderOfServiceDTO> findById(@PathVariable Long id){
+	public ResponseEntity<OrderOfServiceDTO> findById(@PathVariable Long id) {
 		Optional<OrderOfService> order = repository.findById(id);
-		
-		if(order.isPresent()) {
-			OrderOfServiceDTO dto = modelMapper.map(order.get(), OrderOfServiceDTO.class);
+
+		if (order.isPresent()) {
+			OrderOfServiceDTO dto = fromDTO(order.get());
 			return ResponseEntity.ok().body(dto);
 		}
 		return ResponseEntity.notFound().build();
 	}
-}
 
+	private OrderOfServiceDTO fromDTO(OrderOfService order) {
+		return modelMapper.map(order, OrderOfServiceDTO.class);
+	}
+
+	private List<OrderOfServiceDTO> toCollectionFromDTO(List<OrderOfService> orders) {
+		return orders.stream().map(order -> fromDTO(order)).collect(Collectors.toList());
+	}
+
+	private OrderOfService toEntity(OrderOfServiceInputDTO dto) {
+		return modelMapper.map(dto, OrderOfService.class);
+	}
+}

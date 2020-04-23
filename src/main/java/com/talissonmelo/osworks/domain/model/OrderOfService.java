@@ -13,16 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
-import com.sun.istack.NotNull;
 import com.talissonmelo.osworks.domain.model.enums.StatusOrderService;
-import com.talissonmelo.osworks.domain.model.validations.ValidationGroups;
 
 @Entity
 @Table(name = "order_of_service")
@@ -33,27 +25,17 @@ public class OrderOfService implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Valid
-	@NotNull
-	@ConvertGroup(from = Default.class, to = ValidationGroups.CustomersId.class)
 	@ManyToOne
 	@JoinColumn(name = "customers_id")
 	private Customers customers;
 	
-	@NotBlank
 	private String description;
-	
-	@NotNull
 	private BigDecimal price;
 	
-	@JsonProperty(access = Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
 	private StatusOrderService status;
 	
-	@JsonProperty(access = Access.READ_ONLY)
 	private OffsetDateTime dateOpen;
-	
-	@JsonProperty(access = Access.READ_ONLY)
 	private OffsetDateTime dateFinished;
 	
 	public Long getId() {
