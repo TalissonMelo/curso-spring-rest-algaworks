@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.talissonmelo.osworks.domain.service.exceptions.EntityNotFoundException;
 import com.talissonmelo.osworks.domain.service.exceptions.RuleException;
 
 @ControllerAdvice
@@ -23,6 +24,18 @@ public class ApiExceptionHanlder extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(RuleException.class)
 	public ResponseEntity<Object> rule(RuleException e, WebRequest request){
 		HttpStatus status = HttpStatus.BAD_REQUEST;
+		
+		StandardError error = new StandardError();
+		error.setStatus(status.value());
+		error.setMsg(e.getMessage());
+		error.setTimestamp(OffsetDateTime.now());
+		
+		return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
+	}
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<Object> entityNot(EntityNotFoundException e, WebRequest request){
+		HttpStatus status = HttpStatus.NOT_FOUND;
 		
 		StandardError error = new StandardError();
 		error.setStatus(status.value());
