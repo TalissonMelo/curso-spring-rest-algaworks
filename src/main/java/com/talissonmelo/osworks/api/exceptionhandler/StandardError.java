@@ -1,6 +1,6 @@
 package com.talissonmelo.osworks.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class StandardError {
 
 	private Integer status;
-	private LocalDateTime timestamp;
+	private OffsetDateTime timestamp;
 	private String msg;
 	private List<FieldName> errors = new ArrayList<FieldName>();
 
@@ -23,11 +23,11 @@ public class StandardError {
 		this.status = status;
 	}
 
-	public LocalDateTime getTimestamp() {
+	public OffsetDateTime getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(LocalDateTime timestamp) {
+	public void setTimestamp(OffsetDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 

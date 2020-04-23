@@ -1,6 +1,6 @@
 package com.talissonmelo.osworks.domain.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class OrderOfServiceService {
 		
 		order.setCustomers(customers);
 		order.setStatus(StatusOrderService.OPEN);
-		order.setDateOpen(LocalDateTime.now());
+		order.setDateOpen(OffsetDateTime.now());
 		return repository.save(order);
 	}
 

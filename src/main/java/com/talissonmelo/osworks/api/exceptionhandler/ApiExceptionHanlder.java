@@ -1,6 +1,6 @@
 package com.talissonmelo.osworks.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class ApiExceptionHanlder extends ResponseEntityExceptionHandler{
 		StandardError error = new StandardError();
 		error.setStatus(status.value());
 		error.setMsg(e.getMessage());
-		error.setTimestamp(LocalDateTime.now());
+		error.setTimestamp(OffsetDateTime.now());
 		
 		return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
 	}
@@ -47,7 +47,7 @@ public class ApiExceptionHanlder extends ResponseEntityExceptionHandler{
 		
 		StandardError error = new StandardError();
 		error.setStatus(status.value());
-		error.setTimestamp(LocalDateTime.now());
+		error.setTimestamp(OffsetDateTime.now());
 		error.setMsg("Campos Inválidos. Preencha novamento os dados e tente novamente.");
 		error.setErrors(names);
 		return super.handleExceptionInternal(ex, error, headers, status, request);

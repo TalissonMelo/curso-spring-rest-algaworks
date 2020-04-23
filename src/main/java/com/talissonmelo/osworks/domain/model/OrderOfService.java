@@ -2,7 +2,7 @@ package com.talissonmelo.osworks.domain.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -51,10 +51,10 @@ public class OrderOfService implements Serializable {
 	private StatusOrderService status;
 	
 	@JsonProperty(access = Access.READ_ONLY)
-	private LocalDateTime dateOpen;
+	private OffsetDateTime dateOpen;
 	
 	@JsonProperty(access = Access.READ_ONLY)
-	private LocalDateTime dateFinished;
+	private OffsetDateTime dateFinished;
 	
 	public Long getId() {
 		return id;
@@ -96,19 +96,19 @@ public class OrderOfService implements Serializable {
 		this.status = status;
 	}
 	
-	public LocalDateTime getDateOpen() {
+	public OffsetDateTime getDateOpen() {
 		return dateOpen;
 	}
 	
-	public void setDateOpen(LocalDateTime dateOpen) {
+	public void setDateOpen(OffsetDateTime dateOpen) {
 		this.dateOpen = dateOpen;
 	}
 	
-	public LocalDateTime getDateFinished() {
+	public OffsetDateTime getDateFinished() {
 		return dateFinished;
 	}
 	
-	public void setDateFinished(LocalDateTime dateFinished) {
+	public void setDateFinished(OffsetDateTime dateFinished) {
 		this.dateFinished = dateFinished;
 	}
 	
