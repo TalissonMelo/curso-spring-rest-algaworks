@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.talissonmelo.osworks.domain.model.OrderOfService;
 import com.talissonmelo.osworks.domain.repository.OrderOfServiceRepository;
 import com.talissonmelo.osworks.domain.service.OrderOfServiceService;
+import com.talissonmelo.osworks.model.dto.OrderOfServiceDTO;
 
 @RestController
 @RequestMapping(value = "/orders")
@@ -29,6 +31,9 @@ public class OrderOfServiceController {
 	
 	@Autowired
 	private OrderOfServiceRepository repository;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
@@ -42,11 +47,12 @@ public class OrderOfServiceController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<OrderOfService> findById(@PathVariable Long id){
+	public ResponseEntity<OrderOfServiceDTO> findById(@PathVariable Long id){
 		Optional<OrderOfService> order = repository.findById(id);
 		
 		if(order.isPresent()) {
-			return ResponseEntity.ok().body(order.get());
+			OrderOfServiceDTO dto = modelMapper.map(order.get(), OrderOfServiceDTO.class);
+			return ResponseEntity.ok().body(dto);
 		}
 		return ResponseEntity.notFound().build();
 	}
