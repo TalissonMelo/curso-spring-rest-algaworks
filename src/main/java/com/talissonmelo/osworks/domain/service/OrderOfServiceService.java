@@ -38,16 +38,26 @@ public class OrderOfServiceService {
 		return repository.save(order);
 	}
 	
+	
+	public void finish(Long id) {
+		OrderOfService order = find(id);
+		order.finish();
+		repository.save(order);
+	}
+	
 	public Comments addComments(Long orderServiceId, String description) {
 		
 		Comments comment = new Comments();
 		comment.setDescription(description);
 		comment.setDateSend(OffsetDateTime.now());
-		OrderOfService order = repository.findById(orderServiceId).orElseThrow(
-				() -> new EntityNotFoundException("Ordem de Serviço nao encontrada. Id: " + orderServiceId));
+		OrderOfService order = find(orderServiceId);
 		comment.setOrder_of_service(order);
 		
 		return commentsRepository.save(comment);
 	}
 
+	private OrderOfService find(Long id) {
+		return repository.findById(id).orElseThrow(
+				() -> new EntityNotFoundException("Ordem de Serviço nao encontrada. Id: " + id));
+	}
 }

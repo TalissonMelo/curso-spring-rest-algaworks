@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.talissonmelo.osworks.domain.model.enums.StatusOrderService;
+import com.talissonmelo.osworks.domain.service.exceptions.RuleException;
 
 @Entity
 @Table(name = "order_of_service")
@@ -127,5 +128,24 @@ public class OrderOfService implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	
+	public boolean canFinish() {
+		return StatusOrderService.OPEN.equals(getStatus());
+	}
+	
+	public boolean notCanFinish() {
+		return !canFinish();
+	}
+
+	public void finish() {
+		
+		if(notCanFinish()) {
+			throw new RuleException("Ordem de Serviço não pode ser Finalizada...");
+		}
+		
+		setStatus(StatusOrderService.FINISHED);
+		setDateFinished(OffsetDateTime.now());
+		
 	}
 }
